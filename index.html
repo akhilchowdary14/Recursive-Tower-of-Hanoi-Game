@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Tower of Hanoi Pro</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+<div class="top-bar">
+
+Disks:
+<button onclick="changeDisks(-1)">▼</button>
+<span id="diskCountDisplay">3</span>
+<button onclick="changeDisks(1)">▲</button>
+
+Moves: <span id="moves">0</span>
+
+<button onclick="resetGame()">Restart</button>
+<button onclick="showLog()">Log</button>
+<button onclick="autoSolve()">Solve!</button>
+
+</div>
+
+<div class="container">
+
+<div>
+<div class="tower" id="A"></div>
+<div class="label">Tower A</div>
+</div>
+
+<div>
+<div class="tower" id="B"></div>
+<div class="label">Tower B</div>
+</div>
+
+<div>
+<div class="tower" id="C"></div>
+<div class="label">Tower C</div>
+</div>
+
+</div>
+
+<div class="bottom-info">
+Minimum Moves: <span id="minMoves">7</span>
+</div>
+
+<script src="dsa.js"></script>
+<script src="script.js"></script>
+
+</body>
+</html>
