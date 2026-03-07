@@ -1,11 +1,204 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>Tower of Hanoi Pro</title>
-<link rel="stylesheet" href="styles.css">
+<title>Recursive Tower of Hanoi</title>
+
+<style>
+
+body{
+margin:0;
+font-family:Segoe UI,Arial;
+background:#0f172a;
+display:flex;
+justify-content:center;
+align-items:center;
+height:100vh;
+color:white;
+}
+
+/* LOGIN CARD */
+
+.card{
+width:420px;
+background:#1e293b;
+padding:40px;
+border-radius:18px;
+box-shadow:0 10px 30px rgba(0,0,0,0.6);
+text-align:center;
+}
+
+.card h1{
+margin-bottom:5px;
+}
+
+.subtitle{
+color:#94a3b8;
+margin-bottom:25px;
+}
+
+.tabs{
+display:flex;
+background:#0f172a;
+border-radius:12px;
+margin-bottom:25px;
+}
+
+.tabs div{
+flex:1;
+padding:10px;
+border-radius:12px;
+cursor:pointer;
+color:#94a3b8;
+}
+
+.tabs .active{
+background:#1e293b;
+box-shadow:0 2px 6px rgba(0,0,0,0.6);
+color:white;
+}
+
+.input{
+background:#0f172a;
+padding:12px;
+border-radius:10px;
+margin:10px 0;
+}
+
+.input input{
+border:none;
+background:none;
+outline:none;
+width:100%;
+font-size:15px;
+color:white;
+}
+
+.start-btn{
+margin-top:20px;
+width:100%;
+background:#0891b2;
+color:white;
+border:none;
+padding:14px;
+border-radius:12px;
+font-size:16px;
+cursor:pointer;
+}
+
+.start-btn:hover{
+background:#0ea5b7;
+}
+
+/* GAME AREA */
+
+#game{
+display:none;
+width:900px;
+text-align:center;
+}
+
+.top-bar{
+display:flex;
+justify-content:center;
+gap:15px;
+margin-bottom:20px;
+flex-wrap:wrap;
+}
+
+button{
+background:#0891b2;
+color:white;
+border:none;
+padding:8px 15px;
+border-radius:10px;
+cursor:pointer;
+}
+
+button:hover{
+background:#0ea5b7;
+}
+
+.container{
+display:flex;
+justify-content:space-around;
+margin-top:40px;
+}
+
+.tower{
+width:200px;
+height:300px;
+border-bottom:8px solid #ef4444;
+position:relative;
+display:flex;
+flex-direction:column-reverse;
+align-items:center;
+}
+
+.tower::before{
+content:"";
+position:absolute;
+bottom:0;
+width:8px;
+height:250px;
+background:#ef4444;
+}
+
+.disk{
+height:25px;
+margin:6px 0;
+border-radius:20px;
+text-align:center;
+line-height:25px;
+font-weight:bold;
+cursor:grab;
+color:white;
+}
+
+.bottom-info{
+margin-top:20px;
+font-size:18px;
+color:#cbd5f5;
+}
+
+</style>
 </head>
 
 <body>
+
+<!-- LOGIN PAGE -->
+
+<div class="card" id="login">
+
+<h1>Recursive Tower of Hanoi</h1>
+<p class="subtitle">Create an account to play the puzzle</p>
+
+<div class="tabs">
+<div class="active">Login</div>
+<div>Sign Up</div>
+</div>
+
+<div class="input">
+<input placeholder="Full Name">
+</div>
+
+<div class="input">
+<input placeholder="Username or Email">
+</div>
+
+<div class="input">
+<input type="password" placeholder="Password">
+</div>
+
+<button class="start-btn" onclick="startGame()">Start Game</button>
+
+</div>
+
+
+<!-- GAME PAGE -->
+
+<div id="game">
+
+<h1>Recursive Tower of Hanoi</h1>
 
 <div class="top-bar">
 
@@ -24,20 +217,9 @@ Moves: <span id="moves">0</span>
 
 <div class="container">
 
-<div>
 <div class="tower" id="A"></div>
-<div class="label">Tower A</div>
-</div>
-
-<div>
 <div class="tower" id="B"></div>
-<div class="label">Tower B</div>
-</div>
-
-<div>
 <div class="tower" id="C"></div>
-<div class="label">Tower C</div>
-</div>
 
 </div>
 
@@ -45,8 +227,219 @@ Moves: <span id="moves">0</span>
 Minimum Moves: <span id="minMoves">7</span>
 </div>
 
-<script src="dsa.js"></script>
-<script src="script.js"></script>
+</div>
+
+
+<script>
+
+/* LOGIN -> GAME */
+
+function startGame(){
+document.getElementById("login").style.display="none"
+document.getElementById("game").style.display="block"
+createGame()
+}
+
+/* GAME LOGIC */
+
+let diskCount=3
+let moveCount=0
+let isSolving=false
+let moveLog=[]
+
+const towers={A:[],B:[],C:[]}
+
+function updateDisplays(){
+document.getElementById("moves").textContent=moveCount
+document.getElementById("diskCountDisplay").textContent=diskCount
+document.getElementById("minMoves").textContent=Math.pow(2,diskCount)-1
+}
+
+function randomColor(){
+let letters="0123456789ABCDEF"
+let color="#"
+for(let i=0;i<6;i++){
+color+=letters[Math.floor(Math.random()*16)]
+}
+return color
+}
+
+function createGame(){
+
+["A","B","C"].forEach(t=>{
+document.getElementById(t).innerHTML=""
+towers[t]=[]
+})
+
+moveCount=0
+moveLog=[]
+updateDisplays()
+
+for(let i=diskCount;i>=1;i--){
+
+const disk=document.createElement("div")
+
+disk.className="disk"
+disk.style.width=(i*30+40)+"px"
+disk.style.background=randomColor()
+disk.textContent=i
+disk.draggable=true
+disk.dataset.size=i
+
+disk.addEventListener("dragstart",dragStart)
+
+document.getElementById("A").appendChild(disk)
+
+towers.A.push(i)
+
+}
+
+}
+
+function dragStart(e){
+
+if(isSolving){
+e.preventDefault()
+return
+}
+
+const size=parseInt(e.target.dataset.size)
+const parent=e.target.parentElement.id
+
+if(towers[parent][towers[parent].length-1]!==size){
+e.preventDefault()
+return
+}
+
+e.dataTransfer.setData("size",size)
+e.dataTransfer.setData("from",parent)
+
+}
+
+document.querySelectorAll(".tower").forEach(tower=>{
+tower.addEventListener("dragover",e=>e.preventDefault())
+tower.addEventListener("drop",dropDisk)
+})
+
+function dropDisk(e){
+
+if(isSolving) return
+
+const from=e.dataTransfer.getData("from")
+const to=e.currentTarget.id
+
+moveDisk(from,to)
+
+}
+
+function moveDisk(from,to){
+
+if(from===to) return
+
+const disk=towers[from].pop()
+if(!disk) return
+
+const top=towers[to][towers[to].length-1]
+
+if(top && top<disk){
+towers[from].push(disk)
+return
+}
+
+towers[to].push(disk)
+
+const diskElement=document.querySelector(`#${from} .disk[data-size='${disk}']`)
+document.getElementById(to).appendChild(diskElement)
+
+moveCount++
+
+moveLog.push(`Move disk ${disk} from ${from} → ${to}`)
+
+updateDisplays()
+checkWin()
+
+}
+
+function checkWin(){
+
+if(towers.C.length===diskCount){
+
+setTimeout(()=>{
+alert("🎉 Completed in "+moveCount+" moves!")
+},200)
+
+}
+
+}
+
+function changeDisks(change){
+
+if(isSolving) return
+
+diskCount+=change
+
+if(diskCount<2) diskCount=2
+if(diskCount>7) diskCount=7
+
+createGame()
+
+}
+
+function resetGame(){
+isSolving=false
+createGame()
+}
+
+function showLog(){
+
+console.clear()
+console.log("Move Log")
+
+moveLog.forEach(m=>console.log(m))
+
+}
+
+function autoSolve(){
+
+if(isSolving) return
+
+isSolving=true
+
+const moves=[]
+
+generateMoves(diskCount,"A","C","B",moves)
+
+let i=0
+
+const interval=setInterval(()=>{
+
+if(i>=moves.length){
+clearInterval(interval)
+isSolving=false
+return
+}
+
+moveDisk(moves[i][0],moves[i][1])
+i++
+
+},500)
+
+}
+
+function generateMoves(n,from,to,aux,moves){
+
+if(n===1){
+moves.push([from,to])
+return
+}
+
+generateMoves(n-1,from,aux,to,moves)
+moves.push([from,to])
+generateMoves(n-1,aux,to,from,moves)
+
+}
+
+</script>
 
 </body>
 </html>
