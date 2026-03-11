@@ -1,78 +1,60 @@
-body{
-margin:0;
-font-family:Arial;
-background:#050521;
-color:white;
-text-align:center;
+:root {
+  --gold: #f0c040;
+  --bg: #0a0808;
+  --text: #e8d5b0;
 }
 
-.top-bar{
+/* body styling */
+
+body{
+background:#0a0808;
+font-family:'Cinzel',serif;
+color:white;
 display:flex;
 justify-content:center;
 align-items:center;
-gap:15px;
-padding:20px;
-font-size:18px;
-flex-wrap:wrap;
+height:100vh;
 }
 
-button{
-background:#0b5ed7;
-color:white;
-border:none;
-padding:8px 15px;
+/* LOGIN */
+
+#login{
+width:440px;
+padding:40px;
+background:#1e1510;
 border-radius:10px;
-cursor:pointer;
-font-size:15px;
+text-align:center;
 }
 
-button:hover{
-background:#0a58ca;
+/* GAME AREA */
+
+#game{
+display:none;
+text-align:center;
 }
 
-.container{
+.scene{
 display:flex;
 justify-content:space-around;
 margin-top:40px;
-padding:20px;
 }
 
 .tower{
 width:200px;
-height:300px;
-border-bottom:8px solid #ff5a5a;
-position:relative;
+height:260px;
+border-bottom:8px solid red;
 display:flex;
 flex-direction:column-reverse;
 align-items:center;
 }
 
-.tower::before{
-content:"";
-position:absolute;
-bottom:0;
-width:8px;
-height:250px;
-background:#ff5a5a;
-}
-
-.label{
-margin-top:10px;
-font-weight:bold;
-}
+/* DISK */
 
 .disk{
-height:25px;
-margin:6px 0;
-border-radius:20px;
+height:28px;
+margin:5px 0;
+border-radius:15px;
 text-align:center;
-line-height:25px;
-font-weight:bold;
+color:white;
 cursor:grab;
-user-select:none;
-}
-
-.bottom-info{
-margin-top:20px;
-font-size:18px;
 }
